@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.core.dao.EquipLogDao">
+    <insert id="createEquipLog" parameterType="EquipLog">
+        INSERT INTO equipLog
+        (`eid`,
+        `ename`,
+        `enumber`)
+        VALUES
+        (#{eid},
+        #{ename},
+        #{enumber})
+    </insert>
+    <update id="updateEquipLog">
+        update equipLog
+        <set>
+            <if test="eid!=null">
+                eid=#{eid},
+            </if>
+            <if test="ename!=null">
+                ename=#{ename},
+            </if>
+            <if test="enumber!=null">
+                enumber=#{enumber},
+            </if>
+        </set>
+        where ecode=#{ecode}
+    </update>
+    <delete id="deleteEquipLog">
+        delete from equipLog where ecode=#{ecode}
+    </delete>
+
+    <select id="selectEquipLogList" parameterType="EquipLog" resultType="EquipLog">
+        select * from equipLog ORDER BY ecode DESC
+        <include refid="selectEquipLogListWhere"/>
+        <!-- 执行分页查询 -->
+        <if test="start !=null and rows != null">
+            limit #{start},#{rows}
+        </if>
+    </select>
+    <select id="selectEquipLogListCount" parameterType="EquipLog" resultType="Integer">
+        select count(*) from equipLog
+        <include refid="selectEquipLogListWhere"/>
+    </select>
+    <select id="findEquipLogByecode" resultType="com.core.po.EquipLog">
+        select * from equipLog where ecode = #{ecode}
+    </select>
+    <select id="selectEquipLogResultList" resultType="com.core.po.EquipLog">
+        select * from equipLog where apler=#{apler} ORDER BY ecode DESC
+        <include refid="selectEquipLogListWhere"/>
+        <!-- 执行分页查询 -->
+        <if test="start !=null and rows != null">
+            limit #{start},#{rows}
+        </if>
+    </select>
+    <sql id="selectEquipLogListWhere">
+        <where>
+            <if test="ename!=null">
+                ename like "%"#{ename}"%"
+            </if>
+        </where>
+    </sql>
+    <sql id="selectEquipLogResultListWhere">
+        <where>
+            <if test="apler!=null">
+                apler=#{apler}
+            </if>
+        </where>
+    </sql>
+</mapper>

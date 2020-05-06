@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.core.dao.EquipDao">
+    <insert id="createequip" parameterType="Equip">
+        INSERT INTO equip
+        (`eid`,
+        `ename`,
+        `enumber`)
+        VALUES
+        (#{eid},
+        #{ename},
+        #{enumber})
+    </insert>
+    <insert id="createequiplog">
+        INSERT INTO `lims`.`equiplog`(`eid`,`ename`,`enumber`,`apler`)
+        VALUES (#{eid},#{ename},#{enumber},#{apler});
+    </insert>
+    <insert id="uploadEquipapl">
+        INSERT INTO `lims`.`equipapl`(`eid`,`ename`,`enumber`,`apler`)
+        VALUES (#{eid},#{ename},#{enumber},#{apler});
+    </insert>
+    <update id="updateEquip">
+        update equip
+        <set>
+            <if test="eid!=null">
+                eid=#{eid},
+            </if>
+            <if test="ename!=null">
+                ename=#{ename},
+            </if>
+            <if test="enumber!=null">
+                enumber=#{enumber},
+            </if>
+        </set>
+        where ecode=#{ecode}
+    </update>
+    <update id="passEquip">
+        update equipapl
+        <set>
+            <if test="apltime!=null">
+                apltime=#{apltime},
+            </if>
+            <if test="estatus!=null">
+                estatus=#{estatus},
+            </if>
+        </set>
+        where ecode=#{ecode}
+    </update>
+    <update id="rejectEquip">
+        update equipapl
+        <set>
+            <if test="apltime!=null">
+                apltime=#{apltime},
+            </if>
+            <if test="estatus!=null">
+                estatus=#{estatus},
+            </if>
+        </set>
+        where ecode=#{ecode}
+    </update>
+    <delete id="deleteEquip" parameterType="integer">
+        delete from equip where ecode=#{ecode}
+    </delete>
+
+    <select id="selectEquipList" parameterType="Equip" resultType="Equip">
+        select * from equip
+        <include refid="selectEquipListWhere"/>
+        <!-- 执行分页查询 -->
+        <if test="start !=null and rows != null">
+            limit #{start},#{rows}
+        </if>
+    </select>
+    <select id="selectEquipListCount" parameterType="Equip" resultType="Integer">
+        select count(*) from equip
+        <include refid="selectEquipListWhere"/>
+    </select>
+    <select id="selectEquipaplList" resultType="com.core.po.Equip">
+        select * from equipapl
+        <include refid="selectEquipListWhere"/>
+        ORDER BY ecode DESC
+        <!-- 执行分页查询 -->
+        <if test="start !=null and rows != null">
+            limit #{start},#{rows}
+        </if>
+    </select>
+    <select id="findequipByEcode" resultType="com.core.po.Equip">
+        select * from equip where ecode = #{ecode}
+    </select>
+    <select id="selectEquipaplListCount" resultType="java.lang.Integer">
+        select count(*) from equipapl
+    </select>
+    <select id="findequipaplByEcode" resultType="com.core.po.Equip">
+        select * from equipapl where ecode = #{ecode}
+    </select>
+    <select id="findequipByeid" resultType="com.core.po.Equip">
+        select * from equip where eid = #{eid}
+    </select>
+    <sql id="selectEquipListWhere">
+        <where>
+            <if test="eid!=null">
+                eid like "%"#{eid}"%"
+            </if>
+            <if test="ename!=null">
+                and ename like "%"#{ename}"%"
+            </if>
+            <if test="estatus!=null">
+                and estatus like "%"#{estatus}"%"
+            </if>
+        </where>
+    </sql>
+</mapper>

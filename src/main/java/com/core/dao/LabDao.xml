@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.core.dao.LabDao">
+    <!--一种动态的insert语句-->
+    <sql id="labInfoColumns">
+        <trim suffixOverrides=",">
+            <if test="labid != null">`labid`,</if>
+            <if test="labname != null">`labname`,</if>
+            <if test="address != null">`address`,</if>
+            <if test="labstatus != null">`labstatus`,</if>
+            `apler`
+        </trim>
+    </sql>
+    <sql id="labInfoValues">
+        <trim suffixOverrides=",">
+            <if test="labid != null">#{labid},</if>
+            <if test="labname != null">#{labname},</if>
+            <if test="address != null">#{address},</if>
+            <if test="labstatus != null">#{labstatus},</if>
+            #{apler}
+        </trim>
+    </sql>
+    <insert id="createLab" parameterType="Lab" keyColumn="labInfoId" keyProperty="labInfoId" useGeneratedKeys="true">
+        insert into lims_lab(<include refid="labInfoColumns"/>)
+        values (<include refid="labInfoValues"/>)
+    </insert>
+    <update id="updateLab" parameterType="Lab">
+        update lims_lab
+        <set>
+            <if test="labid!=null">
+                labid=#{labid},
+            </if>
+            <if test="labname!=null">
+                labname=#{labname},
+            </if>
+            <if test="address!=null">
+                address=#{address},
+            </if>
+            <if test="apltime!=null and apltime!=''">
+                apltime=#{apltime}
+            </if>
+        </set>
+        where lcode=#{lcode}
+    </update>
+    <update id="passLab" parameterType="Lab">
+        update lims_lab set
+        labstatus=#{labstatus},
+        apltime=#{apltime}
+        where lcode=#{lcode}
+    </update>
+    <update id="rejectLab">
+        update lims_lab set
+        labstatus=#{labstatus},
+        apltime=#{apltime},
+        apler=#{apler}
+        where lcode=#{lcode}
+    </update>
+    <update id="aplLab">
+        update lims_lab set
+        labstatus=#{labstatus},
+        apltime=#{apltime},
+        apler=#{apler}
+        where lcode=#{lcode}
+    </update>
+    <update id="returnLab">
+        update lims_lab set
+        labstatus=#{labstatus},
+        apltime=#{apltime},
+        apler=#{apler}
+        where lcode=#{lcode}
+    </update>
+    <delete id="deleteLab" parameterType="integer">
+         delete from lims_lab where lcode=#{lcode}
+    </delete>
+    <select id="selectLabListCount" parameterType="Lab" resultType="java.lang.Integer">
+        select count(*) from lims_lab
+        <include refid="selectLabListWhere"/>
+    </select>
+    <select id="selectLabList" parameterType="Lab" resultType="Lab">
+        select * from lims_lab
+        <include refid="selectLabListWhere"/>
+        <!-- 执行分页查询 -->
+        <if test="start !=null and rows != null">
+            limit #{start},#{rows}
+        </if>
+    </select>
+    <select id="selectaplLabList" parameterType="Lab" resultType="Lab">
+        select * from lims_lab
+        <include refid="selectLabListWhere"/>
+        <!-- 执行分页查询 -->
+        <if test="start !=null and rows != null">
+            limit #{start},#{rows}
+        </if>
+    </select>
+    <select id="findLabBylcode" resultType="com.core.po.Lab">
+        select * from lims_lab where lcode = #{lcode}
+    </select>
+    <sql id="selectLabListWhere">
+        <where>
+            <if test="labid!=null">
+                labid like "%"#{labid}"%"
+            </if>
+        </where>
+    </sql>
+</mapper>

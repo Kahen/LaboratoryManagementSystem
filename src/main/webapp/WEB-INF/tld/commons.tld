@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<taglib>
+    <!--指定标签库版本号-->
+    <tlib-version>2.0</tlib-version>
+    <!--指定jsp版本号-->
+    <jsp-version>1.2</jsp-version>
+    <!--指定标签库名称-->
+    <short-name>commons</short-name>
+    <!--指定标签库URI-->
+    <uri>http://com/common/</uri>
+    <!--指定标签库的显示名称-->
+    <display-name>Common tag</display-name>
+    <!--指定标签库的描述-->
+    <description>
+        Common tag library
+    </description>
+    <!--注册一个自定义标签-->
+    <tag>
+        <!--指定注册的自定义标签名称-->
+        <name>page</name>
+        <tag-class>com.common.utils.NavigationTag</tag-class>
+        <!--描述-->
+        <description>create navigation for paging</description>
+        <!--指定标签中的属性-->
+        <attribute>
+            <!--指定标签中的属性-->
+            <name>url</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>bean</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>number</name>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+</taglib>

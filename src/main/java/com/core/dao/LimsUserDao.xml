@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.core.dao.LimsUserDao">
+    <sql id="selectLimsUserListWhere">
+        <where>
+            <if test="id!=null">
+                id like "%"#{id}"%"
+            </if>
+            <if test="username!=null">
+                and username like "%"#{username}"%"
+            </if>
+            <if test="usertype!=null">
+                and usertype like "%"#{usertype }"%"
+            </if>
+        </where>
+    </sql>
+    <!--创建用户-->
+    <insert id="createUser" parameterType="LimsUser">
+        INSERT INTO lims_user
+        (`id`,
+        `username`,
+        `password`,
+        `tel`,
+        `address`,
+        `usertype`,
+        `sex`)
+        VALUES
+        (#{id},
+        #{username},
+        #{password},
+        #{tel},
+        #{address},
+        #{usertype},
+        #{sex})
+    </insert>
+    <update id="updateUser" parameterType="LimsUser">
+        update lims_user
+        <set>
+            <if test="id!=null">
+                id=#{id},
+            </if>
+            <if test="username!=null">
+                username=#{username},
+            </if>
+            <if test="password!=null">
+                password=#{password},
+            </if>
+            <if test="tel!=null">
+                tel=#{tel},
+            </if>
+            <if test="address!=null">
+                address=#{address},
+            </if>
+            <if test="usertype!=null">
+                usertype=#{usertype},
+            </if>
+            <if test="sex!=null">
+                sex=#{sex},
+            </if>
+        </set>
+        where ucode=#{ucode}
+    </update>
+    <delete id="deleteUser" parameterType="integer">
+        delete from lims_user where ucode=#{ucode}
+    </delete>
+    <!--查询用户-->
+    <select id="findLimsUser" parameterType="string" resultType="LimsUser">
+        select * from lims_user
+        where id=#{id}
+        and password=#{password}
+        and userType=#{userType}
+    </select>
+
+    <select id="selectLimsUserList" parameterType="LimsUser" resultType="LimsUser">
+        select ucode,id,username,tel,address,usertype,sex
+        from lims_user
+        <include refid="selectLimsUserListWhere"/>
+        <!-- 执行分页查询 -->
+        <if test="start !=null and rows != null">
+            limit #{start},#{rows}
+        </if>
+    </select>
+    <select id="selectLimsUserListCount" parameterType="LimsUser" resultType="Integer">
+        select count(*) from lims_user
+        <include refid="selectLimsUserListWhere"/>
+    </select>
+    <select id="findLimsUserbyucode" parameterType="integer" resultType="com.core.po.LimsUser">
+        select * from lims_user where ucode = #{ucode}
+    </select>
+</mapper>
